@@ -1,1 +1,1812 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Halyk Bank</title>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  --g1:#00A651;--g2:#007A3D;--g3:#005C2A;
+  --accent:#FFD000;
+  --bg:#F0F4F2;--card:#fff;
+  --text:#0D1F17;--text2:#4A6357;--text3:#8FA898;
+  --red:#E53935;--blue:#1565C0;--purple:#6A1B9A;
+  --r:18px;--r-sm:12px;--r-xs:8px;
+  --shadow:0 4px 24px rgba(0,90,40,.10);
+  --shadow-lg:0 12px 48px rgba(0,90,40,.18);
+}
+html,body{width:100%;height:100%;overflow:hidden;background:#0D1F17}
+body{font-family:'Onest',sans-serif;display:flex;justify-content:center;align-items:center}
 
+/* PHONE WRAPPER */
+.phone{
+  width:390px;height:844px;
+  background:var(--bg);
+  border-radius:44px;
+  overflow:hidden;
+  position:relative;
+  box-shadow:0 32px 80px rgba(0,0,0,.6),inset 0 0 0 1.5px rgba(255,255,255,.15);
+  display:flex;flex-direction:column;
+}
+
+/* STATUS BAR */
+.status{
+  background:transparent;
+  padding:14px 28px 0;
+  display:flex;justify-content:space-between;align-items:center;
+  position:absolute;top:0;left:0;right:0;z-index:100;
+  pointer-events:none;
+}
+.status.dark .s-time,.status.dark .s-icons{color:#fff}
+.status.light .s-time,.status.light .s-icons{color:var(--text)}
+.s-time{font-size:15px;font-weight:700;letter-spacing:-.3px}
+.s-icons{font-size:13px;display:flex;gap:4px;align-items:center}
+
+/* SCREENS */
+.screens{flex:1;position:relative;overflow:hidden}
+.screen{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;
+  transform:translateX(100%);
+  transition:transform .35s cubic-bezier(.4,0,.2,1);
+  will-change:transform;
+}
+.screen.active{transform:translateX(0)}
+.screen.prev{transform:translateX(-30%)}
+
+/* SCROLL CONTENT */
+.scroll{flex:1;overflow-y:auto;overflow-x:hidden;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.scroll::-webkit-scrollbar{display:none}
+
+/* BOTTOM NAV */
+.nav{
+  background:#fff;
+  border-top:1px solid rgba(0,0,0,.06);
+  padding:10px 8px 24px;
+  display:flex;
+  box-shadow:0 -8px 32px rgba(0,0,0,.08);
+  position:relative;z-index:50;
+}
+.nav-item{
+  flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;
+  padding:6px 4px;cursor:pointer;background:none;border:none;
+  font-family:'Onest',sans-serif;
+  position:relative;
+  transition:transform .15s;
+}
+.nav-item:active{transform:scale(.88)}
+.nav-icon{
+  width:28px;height:28px;display:flex;align-items:center;justify-content:center;
+  border-radius:8px;transition:background .2s;
+  font-size:18px;
+}
+.nav-item.active .nav-icon{background:var(--bg)}
+.nav-label{font-size:10px;font-weight:600;color:var(--text3);transition:color .2s}
+.nav-item.active .nav-label{color:var(--g1)}
+.nav-fab{
+  width:52px;height:52px;
+  background:linear-gradient(135deg,var(--g2),var(--g1));
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 6px 20px rgba(0,166,81,.45);
+  margin-top:-14px;
+  transition:transform .2s,box-shadow .2s;
+  flex-shrink:0;
+}
+.nav-fab:active{transform:scale(.9);box-shadow:0 3px 10px rgba(0,166,81,.3)}
+.nav-fab svg{width:22px;height:22px;fill:none;stroke:#fff;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+
+/* ===========================
+   HOME SCREEN
+=========================== */
+#s-home .scroll{padding-bottom:8px}
+
+.home-hero{
+  background:linear-gradient(160deg,var(--g3) 0%,var(--g2) 50%,var(--g1) 100%);
+  padding:56px 22px 28px;
+  position:relative;overflow:hidden;
+}
+.home-hero::before{
+  content:'';position:absolute;right:-60px;top:-60px;
+  width:220px;height:220px;
+  background:rgba(255,255,255,.06);
+  border-radius:50%;
+}
+.home-hero::after{
+  content:'';position:absolute;left:-40px;bottom:-80px;
+  width:180px;height:180px;
+  background:rgba(0,0,0,.08);
+  border-radius:50%;
+}
+.hero-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:24px;position:relative;z-index:1}
+.hero-greeting .hey{font-size:13px;color:rgba(255,255,255,.7);margin-bottom:3px;font-weight:400}
+.hero-greeting .name{font-size:20px;color:#fff;font-weight:800;letter-spacing:-.3px}
+.hero-btns{display:flex;gap:8px}
+.hero-btn{
+  width:38px;height:38px;
+  background:rgba(255,255,255,.15);
+  border:1px solid rgba(255,255,255,.2);
+  border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;backdrop-filter:blur(10px);
+  transition:background .15s;
+}
+.hero-btn:active{background:rgba(255,255,255,.25)}
+.hero-btn svg{width:18px;height:18px;stroke:#fff;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.notif-dot{
+  position:absolute;top:-3px;right:-3px;
+  width:8px;height:8px;background:var(--accent);
+  border-radius:50%;border:1.5px solid var(--g2);
+}
+
+/* BALANCE CARD */
+.bal-card{
+  background:rgba(255,255,255,.12);
+  border:1px solid rgba(255,255,255,.2);
+  border-radius:var(--r);
+  padding:18px;
+  backdrop-filter:blur(20px);
+  position:relative;z-index:1;
+}
+.bal-label{font-size:11px;color:rgba(255,255,255,.65);margin-bottom:6px;letter-spacing:.3px;text-transform:uppercase}
+.bal-amount{
+  font-size:32px;font-weight:900;color:#fff;
+  letter-spacing:-1px;margin-bottom:4px;
+  display:flex;align-items:baseline;gap:6px;
+}
+.bal-amount span{font-size:18px;font-weight:600;opacity:.8}
+.bal-card-num{font-size:12px;color:rgba(255,255,255,.55);margin-bottom:14px}
+.bal-actions{display:flex;gap:8px}
+.bal-act{
+  flex:1;
+  background:rgba(255,255,255,.18);
+  border:1px solid rgba(255,255,255,.2);
+  border-radius:10px;
+  padding:10px 6px;
+  color:#fff;font-size:12px;font-weight:700;
+  cursor:pointer;text-align:center;
+  font-family:'Onest',sans-serif;
+  transition:background .15s;
+  display:flex;align-items:center;justify-content:center;gap:5px;
+}
+.bal-act:active{background:rgba(255,255,255,.28)}
+.bal-act svg{width:14px;height:14px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round}
+
+/* QUICK GRID */
+.section{padding:18px 18px 0}
+.sec-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.sec-title{font-size:15px;font-weight:800;color:var(--text);letter-spacing:-.2px}
+.sec-link{font-size:12px;font-weight:700;color:var(--g1)}
+.quick-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.q-btn{
+  display:flex;flex-direction:column;align-items:center;gap:7px;
+  background:none;border:none;cursor:pointer;
+  font-family:'Onest',sans-serif;
+  padding:4px;
+  border-radius:var(--r-sm);
+  transition:transform .15s;
+}
+.q-btn:active{transform:scale(.88)}
+.q-ico{
+  width:54px;height:54px;
+  border-radius:16px;
+  display:flex;align-items:center;justify-content:center;
+  position:relative;
+  transition:transform .15s;
+}
+.q-ico svg{width:24px;height:24px;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.q-badge{
+  position:absolute;top:-4px;right:-4px;
+  background:var(--red);color:#fff;
+  font-size:9px;font-weight:800;
+  padding:2px 5px;border-radius:8px;
+  font-family:'Onest',sans-serif;
+}
+.q-lbl{font-size:11px;font-weight:600;color:var(--text2);text-align:center;line-height:1.2}
+
+/* CARDS CAROUSEL */
+.cards-row{
+  display:flex;gap:12px;
+  padding:0 18px 4px;
+  overflow-x:auto;scrollbar-width:none;
+}
+.cards-row::-webkit-scrollbar{display:none}
+.mini-card{
+  min-width:186px;flex-shrink:0;
+  border-radius:var(--r);
+  padding:16px;
+  color:#fff;position:relative;overflow:hidden;
+  cursor:pointer;
+  transition:transform .2s;
+}
+.mini-card:active{transform:scale(.96)}
+.mini-card::after{
+  content:'';position:absolute;right:-20px;top:-20px;
+  width:90px;height:90px;background:rgba(255,255,255,.1);border-radius:50%;
+}
+.mc-type{font-size:10px;opacity:.75;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.mc-bal{font-size:20px;font-weight:800;margin-bottom:4px;letter-spacing:-.5px}
+.mc-num{font-size:11px;opacity:.65}
+.card-g{background:linear-gradient(135deg,#006B35,#00A651)}
+.card-gold{background:linear-gradient(135deg,#8B6914,#D4AF37)}
+.card-blue{background:linear-gradient(135deg,#0D3B8E,#1565C0)}
+
+/* RATE PILLS */
+.rates-row{display:flex;gap:8px;padding:0 18px}
+.rate-pill{
+  flex:1;background:var(--card);
+  border-radius:var(--r-sm);
+  padding:10px 12px;
+  border:1px solid rgba(0,0,0,.06);
+  cursor:pointer;
+  transition:transform .15s;
+}
+.rate-pill:active{transform:scale(.95)}
+.rate-flag{font-size:18px;margin-bottom:4px}
+.rate-val{font-size:12px;font-weight:700;color:var(--text)}
+.rate-chg{font-size:10px;font-weight:600;margin-top:2px}
+.up{color:var(--g1)}.down{color:var(--red)}
+
+/* TRANSACTIONS */
+.tx-list{padding:0 18px}
+.tx{
+  display:flex;align-items:center;gap:12px;
+  padding:12px 0;border-bottom:1px solid rgba(0,0,0,.05);
+  cursor:pointer;transition:background .1s;
+  margin:0 -4px;padding-left:4px;padding-right:4px;
+  border-radius:var(--r-xs);
+}
+.tx:last-child{border-bottom:none}
+.tx:active{background:rgba(0,0,0,.04)}
+.tx-ico{
+  width:44px;height:44px;border-radius:14px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;flex-shrink:0;
+}
+.tx-info{flex:1;min-width:0}
+.tx-name{font-size:14px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tx-date{font-size:11px;color:var(--text3);margin-top:2px}
+.tx-right{text-align:right}
+.tx-amt{font-size:14px;font-weight:800}
+.tx-minus{color:var(--text)}
+.tx-plus{color:var(--g1)}
+.tx-repeat{
+  font-size:10px;background:rgba(0,166,81,.1);
+  color:var(--g1);border:none;border-radius:6px;
+  padding:3px 8px;font-weight:700;cursor:pointer;
+  font-family:'Onest',sans-serif;margin-top:4px;
+  transition:background .15s;
+}
+.tx-repeat:active{background:rgba(0,166,81,.2)}
+
+/* SERVICES */
+.svc-row{display:flex;gap:10px;padding:0 18px 4px;overflow-x:auto;scrollbar-width:none}
+.svc-row::-webkit-scrollbar{display:none}
+.svc-card{
+  min-width:120px;flex-shrink:0;
+  background:var(--card);border-radius:var(--r);
+  padding:14px 12px;border:1px solid rgba(0,0,0,.06);
+  cursor:pointer;transition:transform .15s;
+}
+.svc-card:active{transform:scale(.94)}
+.svc-ico{width:40px;height:40px;border-radius:10px;margin-bottom:8px;display:flex;align-items:center;justify-content:center;font-size:20px}
+.svc-name{font-size:12px;font-weight:700;color:var(--text)}
+.svc-desc{font-size:10px;color:var(--text3);margin-top:2px;line-height:1.3}
+
+/* ===========================
+   PAYMENTS SCREEN
+=========================== */
+.screen-hdr{
+  background:#fff;
+  padding:56px 18px 14px;
+  display:flex;align-items:center;gap:12px;
+  border-bottom:1px solid rgba(0,0,0,.06);
+  box-shadow:0 2px 12px rgba(0,0,0,.04);
+}
+.back-btn{
+  width:38px;height:38px;background:var(--bg);
+  border-radius:12px;border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:background .15s;flex-shrink:0;
+}
+.back-btn:active{background:#e0e7e3}
+.back-btn svg{width:18px;height:18px;stroke:var(--text);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.hdr-title{font-size:18px;font-weight:800;color:var(--text);letter-spacing:-.3px}
+
+.search-wrap{padding:14px 18px}
+.search-box{
+  background:var(--card);
+  border:1.5px solid rgba(0,0,0,.08);
+  border-radius:var(--r-sm);
+  display:flex;align-items:center;gap:10px;
+  padding:12px 14px;
+  transition:border-color .2s;
+}
+.search-box:focus-within{border-color:var(--g1)}
+.search-box svg{width:16px;height:16px;stroke:var(--text3);fill:none;stroke-width:2;stroke-linecap:round;flex-shrink:0}
+.search-box input{
+  border:none;background:none;outline:none;
+  font-family:'Onest',sans-serif;font-size:14px;
+  color:var(--text);flex:1;
+}
+.search-box input::placeholder{color:var(--text3)}
+
+.chips-row{display:flex;gap:8px;padding:0 18px 14px;overflow-x:auto;scrollbar-width:none}
+.chips-row::-webkit-scrollbar{display:none}
+.chip{
+  padding:8px 14px;border-radius:20px;
+  font-size:12px;font-weight:700;white-space:nowrap;
+  cursor:pointer;border:1.5px solid rgba(0,0,0,.1);
+  background:#fff;color:var(--text2);
+  transition:all .15s;font-family:'Onest',sans-serif;
+}
+.chip.on{background:var(--g1);color:#fff;border-color:var(--g1)}
+
+.pay-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:0 18px 18px}
+.pay-item{
+  background:#fff;border-radius:var(--r);
+  padding:14px 10px;
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  cursor:pointer;border:1.5px solid rgba(0,0,0,.06);
+  transition:all .15s;
+}
+.pay-item:active{background:rgba(0,166,81,.05);border-color:var(--g1)}
+.pay-ico{width:46px;height:46px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:22px}
+.pay-name{font-size:11px;font-weight:700;color:var(--text);text-align:center;line-height:1.2}
+
+/* ===========================
+   TRANSFER SCREEN
+=========================== */
+.method-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:14px 18px 0}
+.method-card{
+  background:#fff;border-radius:var(--r);
+  padding:16px;border:1.5px solid rgba(0,0,0,.06);
+  cursor:pointer;transition:all .15s;
+}
+.method-card:active{border-color:var(--g1);background:rgba(0,166,81,.04)}
+.method-ico{font-size:26px;margin-bottom:8px}
+.method-lbl{font-size:13px;font-weight:700;color:var(--text);line-height:1.2}
+
+.contact-list{padding:0 18px}
+.contact{
+  display:flex;align-items:center;gap:12px;
+  padding:12px 0;border-bottom:1px solid rgba(0,0,0,.05);
+  cursor:pointer;
+  border-radius:var(--r-xs);
+  margin:0 -4px;padding-left:4px;padding-right:4px;
+  transition:background .1s;
+}
+.contact:active{background:rgba(0,0,0,.04)}
+.contact:last-child{border-bottom:none}
+.c-av{
+  width:46px;height:46px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:15px;font-weight:800;color:#fff;flex-shrink:0;
+}
+.c-info{flex:1}
+.c-name{font-size:14px;font-weight:700;color:var(--text)}
+.c-bank{font-size:11px;color:var(--text3);margin-top:2px}
+.c-time{font-size:11px;color:var(--text3)}
+
+/* ===========================
+   ANALYTICS SCREEN
+=========================== */
+.analytics-hero{
+  background:linear-gradient(150deg,var(--g3),var(--g1));
+  padding:56px 22px 24px;
+  color:#fff;
+}
+.ana-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px}
+.ana-spend{font-size:13px;opacity:.75;margin-bottom:4px}
+.ana-amount{font-size:30px;font-weight:900;letter-spacing:-1px}
+.ana-vs{text-align:right}
+.ana-vs-lbl{font-size:11px;opacity:.65;margin-bottom:3px}
+.ana-vs-val{font-size:16px;font-weight:800;color:var(--accent)}
+.period-tabs{
+  display:flex;background:rgba(0,0,0,.15);
+  border-radius:12px;padding:3px;gap:2px;
+}
+.ptab{
+  flex:1;text-align:center;padding:8px;
+  border-radius:10px;font-size:12px;font-weight:700;
+  cursor:pointer;color:rgba(255,255,255,.65);
+  transition:all .2s;font-family:'Onest',sans-serif;
+}
+.ptab.on{background:#fff;color:var(--g2)}
+
+.chart-box{
+  margin:14px 18px;background:#fff;
+  border-radius:var(--r);padding:16px;
+  border:1px solid rgba(0,0,0,.06);
+}
+.chart-lbl{font-size:12px;font-weight:700;color:var(--text2);margin-bottom:14px}
+.bars{display:flex;align-items:flex-end;gap:8px;height:80px}
+.bar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px}
+.bar{width:100%;border-radius:5px 5px 0 0;transition:height .4s ease;min-height:4px}
+.bar.dim{background:rgba(0,166,81,.15)}
+.bar.hi{background:linear-gradient(180deg,var(--g1),var(--g2))}
+.bar-lbl{font-size:9px;color:var(--text3);font-weight:600}
+
+.cat-list{padding:0 18px}
+.cat-item{
+  display:flex;align-items:center;gap:12px;
+  padding:12px 0;border-bottom:1px solid rgba(0,0,0,.05);
+}
+.cat-item:last-child{border-bottom:none}
+.cat-ico{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0}
+.cat-mid{flex:1}
+.cat-name{font-size:13px;font-weight:700;color:var(--text)}
+.cat-track{height:4px;background:rgba(0,0,0,.07);border-radius:2px;margin-top:6px;overflow:hidden}
+.cat-fill{height:100%;border-radius:2px;background:var(--g1)}
+.cat-amt{font-size:13px;font-weight:800;color:var(--text)}
+
+/* ===========================
+   PROFILE SCREEN
+=========================== */
+.profile-hero{
+  background:linear-gradient(150deg,var(--g3),var(--g1));
+  padding:56px 22px 28px;text-align:center;color:#fff;
+}
+.p-avatar{
+  width:72px;height:72px;background:rgba(255,255,255,.18);
+  border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-size:30px;margin:0 auto 12px;
+  border:2px solid rgba(255,255,255,.35);
+}
+.p-name{font-size:21px;font-weight:900;letter-spacing:-.3px}
+.p-id{font-size:12px;opacity:.65;margin-top:3px}
+
+.p-stats{
+  display:flex;background:#fff;
+  margin:-18px 18px 18px;border-radius:var(--r);
+  box-shadow:0 8px 32px rgba(0,0,0,.12);overflow:hidden;
+  position:relative;z-index:10;
+  border:1px solid rgba(0,0,0,.06);
+}
+.p-stat{flex:1;padding:14px 10px;text-align:center}
+.p-stat+.p-stat{border-left:1px solid rgba(0,0,0,.06)}
+.p-sv{font-size:18px;font-weight:900;color:var(--text)}
+.p-sk{font-size:10px;color:var(--text3);margin-top:2px}
+
+.menu-list{padding:0 18px}
+.menu-item{
+  display:flex;align-items:center;gap:12px;
+  padding:14px 0;border-bottom:1px solid rgba(0,0,0,.05);
+  cursor:pointer;
+  border-radius:var(--r-xs);
+  margin:0 -4px;padding-left:4px;padding-right:4px;
+  transition:background .1s;
+}
+.menu-item:active{background:rgba(0,0,0,.04)}
+.menu-item:last-child{border-bottom:none}
+.mi-ico{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.mi-mid{flex:1}
+.mi-lbl{font-size:14px;font-weight:700;color:var(--text)}
+.mi-sub{font-size:11px;color:var(--text3);margin-top:1px}
+.mi-right{display:flex;align-items:center;gap:6px}
+.mi-badge{background:var(--red);color:#fff;font-size:10px;font-weight:800;padding:2px 7px;border-radius:8px}
+.mi-arrow svg{width:16px;height:16px;stroke:var(--text3);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.mi-toggle{
+  width:44px;height:24px;background:var(--g1);border-radius:12px;
+  position:relative;cursor:pointer;
+  transition:background .2s;
+}
+.mi-toggle::after{
+  content:'';position:absolute;top:2px;right:2px;
+  width:20px;height:20px;background:#fff;border-radius:50%;
+  transition:transform .2s;
+  box-shadow:0 1px 4px rgba(0,0,0,.2);
+}
+.mi-toggle.off{background:var(--text3)}
+.mi-toggle.off::after{transform:translateX(-20px)}
+
+/* ===========================
+   MODAL / BOTTOM SHEET
+=========================== */
+.overlay{
+  position:absolute;inset:0;
+  background:rgba(0,0,0,.5);
+  z-index:200;
+  opacity:0;pointer-events:none;
+  transition:opacity .3s;
+  backdrop-filter:blur(4px);
+}
+.overlay.show{opacity:1;pointer-events:all}
+.sheet{
+  position:absolute;bottom:0;left:0;right:0;
+  background:#fff;border-radius:24px 24px 0 0;
+  z-index:201;
+  transform:translateY(100%);
+  transition:transform .35s cubic-bezier(.4,0,.2,1);
+  max-height:90%;overflow-y:auto;
+  padding-bottom:32px;
+}
+.sheet.show{transform:translateY(0)}
+.sheet-handle{
+  width:36px;height:4px;background:rgba(0,0,0,.15);
+  border-radius:2px;margin:12px auto 20px;
+}
+.sheet-title{font-size:18px;font-weight:800;color:var(--text);padding:0 20px;margin-bottom:16px;letter-spacing:-.3px}
+
+/* TRANSFER FORM */
+.tf-form{padding:0 20px}
+.tf-label{font-size:12px;font-weight:700;color:var(--text2);margin-bottom:6px;text-transform:uppercase;letter-spacing:.3px}
+.tf-input{
+  width:100%;padding:14px 16px;
+  background:var(--bg);border:1.5px solid transparent;
+  border-radius:var(--r-sm);font-family:'Onest',sans-serif;
+  font-size:16px;color:var(--text);outline:none;
+  transition:border-color .2s;margin-bottom:16px;
+}
+.tf-input:focus{border-color:var(--g1);background:#fff}
+.tf-amount{font-size:28px;font-weight:900;text-align:center}
+.keypad{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:16px}
+.key{
+  padding:16px;border-radius:var(--r-sm);
+  background:var(--bg);border:none;cursor:pointer;
+  font-family:'Onest',sans-serif;font-size:20px;font-weight:700;
+  color:var(--text);transition:background .1s;
+  display:flex;align-items:center;justify-content:center;
+}
+.key:active{background:#d4e0da}
+.key-del{background:rgba(229,57,53,.08);color:var(--red)}
+.key-ok{background:var(--g1);color:#fff;font-size:14px}
+.key-ok:active{background:var(--g2)}
+
+/* SUCCESS */
+.success-wrap{padding:30px 24px;text-align:center}
+.success-ico{font-size:64px;margin-bottom:16px;animation:pop .4s cubic-bezier(.34,1.56,.64,1)}
+@keyframes pop{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
+.success-title{font-size:22px;font-weight:900;color:var(--text);margin-bottom:8px}
+.success-sub{font-size:14px;color:var(--text2);line-height:1.5}
+.success-amt{font-size:36px;font-weight:900;color:var(--g1);margin:16px 0;letter-spacing:-1px}
+.btn-primary{
+  width:100%;padding:16px;
+  background:linear-gradient(135deg,var(--g2),var(--g1));
+  border:none;border-radius:var(--r-sm);
+  color:#fff;font-family:'Onest',sans-serif;
+  font-size:16px;font-weight:800;cursor:pointer;
+  transition:opacity .2s;margin-top:8px;
+  box-shadow:0 6px 20px rgba(0,166,81,.3);
+}
+.btn-primary:active{opacity:.85}
+.btn-sec{
+  width:100%;padding:14px;
+  background:transparent;border:1.5px solid rgba(0,0,0,.12);
+  border-radius:var(--r-sm);color:var(--text2);
+  font-family:'Onest',sans-serif;font-size:15px;font-weight:700;
+  cursor:pointer;margin-top:8px;transition:background .15s;
+}
+.btn-sec:active{background:var(--bg)}
+
+/* NOTIF PANEL */
+.notif-item{
+  padding:14px 20px;border-bottom:1px solid rgba(0,0,0,.05);
+  display:flex;gap:12px;cursor:pointer;
+  transition:background .1s;
+}
+.notif-item:active{background:var(--bg)}
+.notif-item.unread{background:rgba(0,166,81,.04)}
+.n-dot{width:8px;height:8px;background:var(--g1);border-radius:50%;margin-top:6px;flex-shrink:0}
+.n-dot.read{background:transparent}
+.n-text{font-size:13px;color:var(--text);line-height:1.5}
+.n-time{font-size:11px;color:var(--text3);margin-top:4px}
+
+/* CARD DETAIL */
+.card-full{
+  margin:16px 20px;border-radius:var(--r);
+  padding:22px;color:#fff;position:relative;overflow:hidden;
+}
+.card-full::after{content:'';position:absolute;right:-30px;bottom:-30px;width:120px;height:120px;background:rgba(255,255,255,.1);border-radius:50%}
+.cf-type{font-size:11px;opacity:.7;text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px}
+.cf-num{font-size:17px;font-weight:700;letter-spacing:2px;margin-bottom:12px}
+.cf-row{display:flex;justify-content:space-between;font-size:11px;opacity:.75;margin-bottom:14px}
+.cf-bal{font-size:26px;font-weight:900;letter-spacing:-.5px}
+
+.card-actions-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:0 20px;margin-bottom:16px}
+.ca-btn{
+  background:var(--bg);border-radius:var(--r-sm);
+  padding:12px 8px;display:flex;flex-direction:column;align-items:center;gap:6px;
+  cursor:pointer;border:none;font-family:'Onest',sans-serif;
+  transition:background .15s;
+}
+.ca-btn:active{background:#d4e0da}
+.ca-ico{font-size:20px}
+.ca-lbl{font-size:10px;font-weight:700;color:var(--text2)}
+
+/* SPACER */
+.sp{height:8px}
+.sp2{height:16px}
+.sp3{height:24px}
+
+/* ANIMATIONS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.screen.active .scroll>*{animation:fadeUp .3s ease both}
+.screen.active .scroll>*:nth-child(1){animation-delay:.02s}
+.screen.active .scroll>*:nth-child(2){animation-delay:.06s}
+.screen.active .scroll>*:nth-child(3){animation-delay:.10s}
+.screen.active .scroll>*:nth-child(4){animation-delay:.14s}
+.screen.active .scroll>*:nth-child(5){animation-delay:.18s}
+.screen.active .scroll>*:nth-child(6){animation-delay:.22s}
+</style>
+</head>
+<body>
+<div class="phone">
+
+  <!-- STATUS BAR -->
+  <div class="status dark" id="statusBar">
+    <span class="s-time" id="clockEl">13:42</span>
+    <div class="s-icons">
+      <svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="4" width="3" height="8" rx="1"/><rect x="4.5" y="2.5" width="3" height="9.5" rx="1"/><rect x="9" y="0.5" width="3" height="11.5" rx="1"/><rect x="13.5" y="0" width="2.5" height="12" rx="1" opacity=".3"/></svg>
+      <svg width="16" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 6s4-4 11-4 11 4 11 4"/><path d="M5 10s3-3 7-3 7 3 7 3"/><path d="M9 14s2-2 3-2 3 2 3 2"/><circle cx="12" cy="18" r="1.5" fill="currentColor"/></svg>
+      <svg width="22" height="12" viewBox="0 0 22 12"><rect x="0" y="1" width="19" height="10" rx="2.5" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="1.5" y="2.5" width="13" height="7" rx="1.5" fill="currentColor"/><path d="M20 4v4a2 2 0 000-4z" fill="currentColor" opacity=".5"/></svg>
+    </div>
+  </div>
+
+  <!-- SCREENS -->
+  <div class="screens">
+
+    <!-- ======= HOME ======= -->
+    <div class="screen active" id="s-home">
+      <div class="scroll">
+        <div class="home-hero">
+          <div class="hero-top">
+            <div class="hero-greeting">
+              <div class="hey">Добрый день 👋</div>
+              <div class="name">Гревцев Михаил</div>
+            </div>
+            <div class="hero-btns">
+              <div class="hero-btn" style="position:relative" onclick="openNotif()">
+                <svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+                <div class="notif-dot"></div>
+              </div>
+              <div class="hero-btn" onclick="goTo('s-profile')">
+                <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+              </div>
+            </div>
+          </div>
+          <div class="bal-card" onclick="openCardDetail('green')">
+            <div class="bal-label">Основная карта · Halyk Visa</div>
+            <div class="bal-amount"><span>₸</span> <span id="mainBal">248 500</span></div>
+            <div class="bal-card-num">•••• •••• •••• 4521 &nbsp;·&nbsp; до 03/28</div>
+            <div class="bal-actions">
+              <div class="bal-act" onclick="event.stopPropagation();openTransferSheet()">
+                <svg viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></svg>Перевести
+              </div>
+              <div class="bal-act" onclick="event.stopPropagation();openTopupSheet()">
+                <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12l7 7 7-7"/></svg>Пополнить
+              </div>
+              <div class="bal-act" onclick="event.stopPropagation();goTo('s-payments')">⚡ Платёж</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="sec-head"><span class="sec-title">Быстрый доступ</span></div>
+          <div class="quick-grid">
+            <button class="q-btn" onclick="openCardDetail('green')">
+              <div class="q-ico" style="background:#E6F7EE">
+                <svg style="stroke:var(--g1)" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="3"/><path d="M2 10h20"/></svg>
+              </div><span class="q-lbl">Карты</span>
+            </button>
+            <button class="q-btn" onclick="openDeposit()">
+              <div class="q-ico" style="background:#FFF8E6">
+                <svg style="stroke:#D4AF37" viewBox="0 0 24 24"><path d="M12 2a10 10 0 100 20A10 10 0 0012 2z"/><path d="M12 6v6l4 2"/></svg>
+              </div><span class="q-lbl">Депозиты</span>
+            </button>
+            <button class="q-btn" onclick="goTo('s-transfers')">
+              <div class="q-ico" style="background:#E6F0FF">
+                <svg style="stroke:#1565C0" viewBox="0 0 24 24"><path d="M7 16l-4-4 4-4M17 8l4 4-4 4M14 4l-4 16"/></svg>
+              </div><span class="q-lbl">Переводы</span>
+            </button>
+            <button class="q-btn" onclick="goTo('s-payments')">
+              <div class="q-ico" style="background:#F0E6FF">
+                <svg style="stroke:#6A1B9A" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                <div class="q-badge">3</div>
+              </div><span class="q-lbl">Платежи</span>
+            </button>
+            <button class="q-btn" onclick="openQR()">
+              <div class="q-ico" style="background:#E6F7EE">
+                <svg style="stroke:var(--g1)" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="3" height="3"/><rect x="18" y="14" width="3" height="3"/><rect x="14" y="18" width="3" height="3"/><rect x="18" y="18" width="3" height="3"/></svg>
+              </div><span class="q-lbl">QR</span>
+            </button>
+            <button class="q-btn" onclick="goTo('s-analytics')">
+              <div class="q-ico" style="background:#FFE6E6">
+                <svg style="stroke:var(--red)" viewBox="0 0 24 24"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+              </div><span class="q-lbl">Аналитика</span>
+            </button>
+            <button class="q-btn" onclick="openGov()">
+              <div class="q-ico" style="background:#E6FFF5">
+                <svg style="stroke:#00695C" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+              </div><span class="q-lbl">Госуслуги</span>
+            </button>
+            <button class="q-btn" onclick="openCredit()">
+              <div class="q-ico" style="background:#FFF0E6">
+                <svg style="stroke:#E65100" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+              </div><span class="q-lbl">Кредиты</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="sp2"></div>
+        <div class="sec-head" style="padding:0 18px"><span class="sec-title">Мои карты</span><span class="sec-link" onclick="openAllCards()">Все</span></div>
+        <div class="sp" style="height:10px"></div>
+        <div class="cards-row">
+          <div class="mini-card card-g" onclick="openCardDetail('green')">
+            <div class="mc-type">Halyk Visa Classic</div>
+            <div class="mc-bal">₸ 248 500</div>
+            <div class="mc-num">•••• 4521</div>
+          </div>
+          <div class="mini-card card-gold" onclick="openCardDetail('gold')">
+            <div class="mc-type">Halyk Gold</div>
+            <div class="mc-bal">₸ 84 200</div>
+            <div class="mc-num">•••• 7832</div>
+          </div>
+          <div class="mini-card card-blue" onclick="openCardDetail('blue')">
+            <div class="mc-type">Кредит / Рассрочка</div>
+            <div class="mc-bal">₸ 500 000</div>
+            <div class="mc-num">Лимит · 56%</div>
+          </div>
+        </div>
+
+        <div class="sp2"></div>
+        <div class="sec-head" style="padding:0 18px"><span class="sec-title">Курсы валют</span><span class="sec-link" onclick="openRates()">Все</span></div>
+        <div class="sp" style="height:10px"></div>
+        <div class="rates-row">
+          <div class="rate-pill" onclick="openRates()">
+            <div class="rate-flag">🇺🇸</div>
+            <div class="rate-val">497.5 – 502.5</div>
+            <div class="rate-chg up">▲ 0.3%</div>
+          </div>
+          <div class="rate-pill" onclick="openRates()">
+            <div class="rate-flag">🇪🇺</div>
+            <div class="rate-val">578 – 583</div>
+            <div class="rate-chg down">▼ 0.1%</div>
+          </div>
+          <div class="rate-pill" onclick="openRates()">
+            <div class="rate-flag">🇷🇺</div>
+            <div class="rate-val">6.31 – 6.61</div>
+            <div class="rate-chg up">▲ 0.5%</div>
+          </div>
+        </div>
+
+        <div class="sp2"></div>
+        <div class="sec-head" style="padding:0 18px"><span class="sec-title">Последние операции</span><span class="sec-link" onclick="openHistory()">Все</span></div>
+        <div class="sp"></div>
+        <div class="tx-list">
+          <div class="tx" onclick="openTxDetail('Magnum','4 320','minus')">
+            <div class="tx-ico" style="background:#FFF3E0">🛒</div>
+            <div class="tx-info"><div class="tx-name">Magnum Cash&Carry</div><div class="tx-date">Сегодня, 11:24</div></div>
+            <div class="tx-right"><div class="tx-amt tx-minus">−₸ 4 320</div></div>
+          </div>
+          <div class="tx" onclick="openTxDetail('Зарплата','180 000','plus')">
+            <div class="tx-ico" style="background:#E8F5E9">💰</div>
+            <div class="tx-info"><div class="tx-name">Зарплата</div><div class="tx-date">03 Март, 09:00</div></div>
+            <div class="tx-right"><div class="tx-amt tx-plus">+₸ 180 000</div></div>
+          </div>
+          <div class="tx" onclick="openTxDetail('Яндекс Go','1 250','minus')">
+            <div class="tx-ico" style="background:#FFF8E1">🚕</div>
+            <div class="tx-info"><div class="tx-name">Яндекс Go</div><div class="tx-date">02 Март, 19:32</div></div>
+            <div class="tx-right">
+              <div class="tx-amt tx-minus">−₸ 1 250</div>
+              <button class="tx-repeat" onclick="event.stopPropagation();quickRepeat('Яндекс Go','1 250')">Повторить</button>
+            </div>
+          </div>
+          <div class="tx" onclick="openTxDetail('Kcell','3 000','minus')">
+            <div class="tx-ico" style="background:#E3F2FD">📱</div>
+            <div class="tx-info"><div class="tx-name">Kcell +7 777 123 45 67</div><div class="tx-date">01 Март</div></div>
+            <div class="tx-right">
+              <div class="tx-amt tx-minus">−₸ 3 000</div>
+              <button class="tx-repeat" onclick="event.stopPropagation();quickRepeat('Kcell','3 000')">Повторить</button>
+            </div>
+          </div>
+          <div class="tx" onclick="openTxDetail('Appteka','3 800','minus')">
+            <div class="tx-ico" style="background:#FCE4EC">💊</div>
+            <div class="tx-info"><div class="tx-name">Appteka</div><div class="tx-date">01 Март, 15:10</div></div>
+            <div class="tx-right"><div class="tx-amt tx-minus">−₸ 3 800</div></div>
+          </div>
+        </div>
+
+        <div class="sp2"></div>
+        <div class="sec-head" style="padding:0 18px"><span class="sec-title">Сервисы</span><span class="sec-link">Все</span></div>
+        <div class="sp"></div>
+        <div class="svc-row">
+          <div class="svc-card" onclick="showInfo('Halyk Easy','Откройте карту для ребёнка. Контроль расходов, лимиты и пополнение.')">
+            <div class="svc-ico" style="background:#FFF3E0">🟡</div>
+            <div class="svc-name">Halyk Easy</div>
+            <div class="svc-desc">Карта для детей</div>
+          </div>
+          <div class="svc-card" onclick="showInfo('Appteka','Аптека с доставкой за 45 минут. Лекарства с рецептом и без.')">
+            <div class="svc-ico" style="background:#E3F2FD">💊</div>
+            <div class="svc-name">Appteka</div>
+            <div class="svc-desc">Доставка 45 мин</div>
+          </div>
+          <div class="svc-card" onclick="showInfo('Кино.kz','Смотрите фильмы и сериалы онлайн. Платите картой Halyk.')">
+            <div class="svc-ico" style="background:#EDE7F6">🎬</div>
+            <div class="svc-name">Kino.kz</div>
+            <div class="svc-desc">Кино онлайн</div>
+          </div>
+          <div class="svc-card" onclick="showInfo('Күнделік','Электронный дневник. Оценки, расписание, сообщения учителей.')">
+            <div class="svc-ico" style="background:#E8F5E9">📚</div>
+            <div class="svc-name">Күнделік</div>
+            <div class="svc-desc">Дневник</div>
+          </div>
+          <div class="svc-card" onclick="showInfo('Мой транспорт','Купите техталон и страховку онлайн, не выходя из дома.')">
+            <div class="svc-ico" style="background:#FFF8E1">🚗</div>
+            <div class="svc-name">Транспорт</div>
+            <div class="svc-desc">Техталон, страх.</div>
+          </div>
+        </div>
+        <div class="sp3"></div>
+      </div>
+      <div class="nav">
+        <button class="nav-item active" onclick="setTab('home')">
+          <div class="nav-icon">🏠</div><span class="nav-label">Главная</span>
+        </button>
+        <button class="nav-item" onclick="goTo('s-analytics');setTab('analytics')">
+          <div class="nav-icon">📊</div><span class="nav-label">Финансы</span>
+        </button>
+        <button class="nav-fab" onclick="goTo('s-payments');setTab('pay')">
+          <svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        </button>
+        <button class="nav-item" onclick="goTo('s-transfers');setTab('transfer')">
+          <div class="nav-icon">↔️</div><span class="nav-label">Переводы</span>
+        </button>
+        <button class="nav-item" onclick="goTo('s-profile');setTab('profile')">
+          <div class="nav-icon">👤</div><span class="nav-label">Профиль</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- ======= PAYMENTS ======= -->
+    <div class="screen" id="s-payments">
+      <div class="screen-hdr">
+        <button class="back-btn" onclick="goBack()">
+          <svg viewBox="0 0 24 24"><polyline points="15,18 9,12 15,6"/></svg>
+        </button>
+        <span class="hdr-title">Платежи</span>
+      </div>
+      <div class="scroll">
+        <div class="search-wrap">
+          <div class="search-box">
+            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+            <input type="text" placeholder="Поиск услуги или организации..." oninput="filterPayments(this.value)">
+          </div>
+        </div>
+        <div class="chips-row" id="payChips">
+          <div class="chip on" onclick="filterCat(this,'all')">Все</div>
+          <div class="chip" onclick="filterCat(this,'comm')">Связь</div>
+          <div class="chip" onclick="filterCat(this,'util')">ЖКХ</div>
+          <div class="chip" onclick="filterCat(this,'gov')">Госуслуги</div>
+          <div class="chip" onclick="filterCat(this,'edu')">Учёба</div>
+          <div class="chip" onclick="filterCat(this,'health')">Здоровье</div>
+        </div>
+        <div class="pay-grid" id="payGrid">
+          <div class="pay-item" data-cat="comm" onclick="openPaySheet('Kcell')">
+            <div class="pay-ico" style="background:#E3F2FD">📱</div><div class="pay-name">Kcell</div>
+          </div>
+          <div class="pay-item" data-cat="comm" onclick="openPaySheet('Beeline')">
+            <div class="pay-ico" style="background:#FFF8E1">📡</div><div class="pay-name">Beeline</div>
+          </div>
+          <div class="pay-item" data-cat="comm" onclick="openPaySheet('Activ')">
+            <div class="pay-ico" style="background:#E8F5E9">📶</div><div class="pay-name">Activ</div>
+          </div>
+          <div class="pay-item" data-cat="comm" onclick="openPaySheet('Интернет')">
+            <div class="pay-ico" style="background:#E8EAF6">🌐</div><div class="pay-name">Интернет</div>
+          </div>
+          <div class="pay-item" data-cat="util" onclick="openPaySheet('Электроэнергия')">
+            <div class="pay-ico" style="background:#FFF9C4">💡</div><div class="pay-name">Электро-энергия</div>
+          </div>
+          <div class="pay-item" data-cat="util" onclick="openPaySheet('Водоснабжение')">
+            <div class="pay-ico" style="background:#E0F7FA">💧</div><div class="pay-name">Водо-снабжение</div>
+          </div>
+          <div class="pay-item" data-cat="util" onclick="openPaySheet('Газ')">
+            <div class="pay-ico" style="background:#FFF3E0">🔥</div><div class="pay-name">Газ</div>
+          </div>
+          <div class="pay-item" data-cat="util" onclick="openPaySheet('КСК / Аренда')">
+            <div class="pay-ico" style="background:#FCE4EC">🏠</div><div class="pay-name">КСК / Аренда</div>
+          </div>
+          <div class="pay-item" data-cat="gov" onclick="openPaySheet('Штрафы ПДД')">
+            <div class="pay-ico" style="background:#EDE7F6">🚗</div><div class="pay-name">Штрафы ПДД</div>
+          </div>
+          <div class="pay-item" data-cat="gov" onclick="openPaySheet('Налоги')">
+            <div class="pay-ico" style="background:#E8F5E9">🏛️</div><div class="pay-name">Налоги</div>
+          </div>
+          <div class="pay-item" data-cat="edu" onclick="openPaySheet('Обучение')">
+            <div class="pay-ico" style="background:#F3E5F5">🎓</div><div class="pay-name">Обучение</div>
+          </div>
+          <div class="pay-item" data-cat="health" onclick="openPaySheet('Медицина')">
+            <div class="pay-ico" style="background:#E8F5E9">🏥</div><div class="pay-name">Медицина</div>
+          </div>
+          <div class="pay-item" data-cat="health" onclick="openPaySheet('Appteka')">
+            <div class="pay-ico" style="background:#FCE4EC">💊</div><div class="pay-name">Appteka</div>
+          </div>
+          <div class="pay-item" data-cat="comm" onclick="openPaySheet('TV / Кабельное')">
+            <div class="pay-ico" style="background:#E3F2FD">📺</div><div class="pay-name">TV / Кабельное</div>
+          </div>
+          <div class="pay-item" data-cat="gov" onclick="openPaySheet('Пенсионный')">
+            <div class="pay-ico" style="background:#FFF8E1">🏦</div><div class="pay-name">Пенсионный</div>
+          </div>
+        </div>
+
+        <div class="sec-head" style="padding:0 18px"><span class="sec-title">Недавние платежи</span></div>
+        <div class="sp"></div>
+        <div class="tx-list">
+          <div class="tx" onclick="openPaySheet('Kcell')">
+            <div class="tx-ico" style="background:#E3F2FD">📱</div>
+            <div class="tx-info"><div class="tx-name">Kcell +7 777 123 45 67</div><div class="tx-date">01 Март</div></div>
+            <div class="tx-right">
+              <div class="tx-amt tx-minus">−₸ 3 000</div>
+              <button class="tx-repeat" onclick="event.stopPropagation();quickRepeat('Kcell','3 000')">Повторить</button>
+            </div>
+          </div>
+          <div class="tx" onclick="openPaySheet('Beeline Internet')">
+            <div class="tx-ico" style="background:#FFF8E1">🌐</div>
+            <div class="tx-info"><div class="tx-name">Beeline Internet</div><div class="tx-date">25 Февр.</div></div>
+            <div class="tx-right">
+              <div class="tx-amt tx-minus">−₸ 4 500</div>
+              <button class="tx-repeat" onclick="event.stopPropagation();quickRepeat('Beeline','4 500')">Повторить</button>
+            </div>
+          </div>
+          <div class="tx" onclick="openPaySheet('Электроэнергия')">
+            <div class="tx-ico" style="background:#FFF9C4">💡</div>
+            <div class="tx-info"><div class="tx-name">Электроэнергия</div><div class="tx-date">20 Февр.</div></div>
+            <div class="tx-right">
+              <div class="tx-amt tx-minus">−₸ 2 800</div>
+              <button class="tx-repeat" onclick="event.stopPropagation();quickRepeat('Электро','2 800')">Повторить</button>
+            </div>
+          </div>
+        </div>
+        <div class="sp3"></div>
+      </div>
+      <div class="nav">
+        <button class="nav-item" onclick="goTo('s-home');setTab('home')"><div class="nav-icon">🏠</div><span class="nav-label">Главная</span></button>
+        <button class="nav-item" onclick="goTo('s-analytics');setTab('analytics')"><div class="nav-icon">📊</div><span class="nav-label">Финансы</span></button>
+        <button class="nav-fab active" onclick="setTab('pay')">
+          <svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        </button>
+        <button class="nav-item" onclick="goTo('s-transfers');setTab('transfer')"><div class="nav-icon">↔️</div><span class="nav-label">Переводы</span></button>
+        <button class="nav-item" onclick="goTo('s-profile');setTab('profile')"><div class="nav-icon">👤</div><span class="nav-label">Профиль</span></button>
+      </div>
+    </div>
+
+    <!-- ======= TRANSFERS ======= -->
+    <div class="screen" id="s-transfers">
+      <div class="screen-hdr">
+        <button class="back-btn" onclick="goBack()"><svg viewBox="0 0 24 24"><polyline points="15,18 9,12 15,6"/></svg></button>
+        <span class="hdr-title">Переводы</span>
+      </div>
+      <div class="scroll">
+        <div class="method-grid">
+          <div class="method-card" onclick="openTransferTo('По номеру телефона','📞')">
+            <div class="method-ico">📞</div>
+            <div class="method-lbl">По номеру телефона</div>
+          </div>
+          <div class="method-card" onclick="openTransferTo('По номеру карты','💳')">
+            <div class="method-ico">💳</div>
+            <div class="method-lbl">По номеру карты</div>
+          </div>
+          <div class="method-card" onclick="openTransferTo('По реквизитам','🏦')">
+            <div class="method-ico">🏦</div>
+            <div class="method-lbl">По реквизитам банка</div>
+          </div>
+          <div class="method-card" onclick="openQR()">
+            <div class="method-ico">📷</div>
+            <div class="method-lbl">По QR-коду</div>
+          </div>
+        </div>
+
+        <div class="sp2"></div>
+        <div class="sec-head" style="padding:0 18px"><span class="sec-title">Частые получатели</span><span class="sec-link" onclick="openAllContacts()">Все</span></div>
+        <div class="sp"></div>
+        <div class="contact-list">
+          <div class="contact" onclick="openTransferContact('Айгерим Досова','АД','#f093fb,#f5576c')">
+            <div class="c-av" style="background:linear-gradient(135deg,#f093fb,#f5576c)">АД</div>
+            <div class="c-info"><div class="c-name">Айгерим Досова</div><div class="c-bank">Kaspi · +7 777 *** **89</div></div>
+            <div class="c-time">3 дня</div>
+          </div>
+          <div class="contact" onclick="openTransferContact('Нурлан Сейткали','НС','#4facfe,#00f2fe')">
+            <div class="c-av" style="background:linear-gradient(135deg,#4facfe,#00f2fe)">НС</div>
+            <div class="c-info"><div class="c-name">Нурлан Сейткали</div><div class="c-bank">Halyk · +7 747 *** **12</div></div>
+            <div class="c-time">5 дней</div>
+          </div>
+          <div class="contact" onclick="openTransferContact('Мама','МА','#43e97b,#38f9d7')">
+            <div class="c-av" style="background:linear-gradient(135deg,#43e97b,#38f9d7)">МА</div>
+            <div class="c-info"><div class="c-name">Мама</div><div class="c-bank">Halyk · +7 701 *** **55</div></div>
+            <div class="c-time">1 нед.</div>
+          </div>
+          <div class="contact" onclick="openTransferContact('Дана Куралова','ДК','#fa709a,#fee140')">
+            <div class="c-av" style="background:linear-gradient(135deg,#fa709a,#fee140)">ДК</div>
+            <div class="c-info"><div class="c-name">Дана Куралова</div><div class="c-bank">ForteBank · +7 778 *** **34</div></div>
+            <div class="c-time">2 нед.</div>
+          </div>
+          <div class="contact" onclick="openTransferContact('Арман Б.','АБ','#a18cd1,#fbc2eb')">
+            <div class="c-av" style="background:linear-gradient(135deg,#a18cd1,#fbc2eb)">АБ</div>
+            <div class="c-info"><div class="c-name">Арман Бекенов</div><div class="c-bank">Kaspi · +7 705 *** **71</div></div>
+            <div class="c-time">3 нед.</div>
+          </div>
+        </div>
+
+        <div class="sp2"></div>
+        <div class="sec-head" style="padding:0 18px"><span class="sec-title">История переводов</span></div>
+        <div class="sp"></div>
+        <div class="tx-list">
+          <div class="tx" onclick="openTxDetail('Айгерим Досова','15 000','minus')">
+            <div class="c-av" style="background:linear-gradient(135deg,#f093fb,#f5576c);width:44px;height:44px;border-radius:14px;font-size:13px;flex-shrink:0">АД</div>
+            <div class="tx-info"><div class="tx-name">Айгерим Досова</div><div class="tx-date">01 Март · Kaspi</div></div>
+            <div class="tx-right">
+              <div class="tx-amt tx-minus">−₸ 15 000</div>
+              <button class="tx-repeat" onclick="event.stopPropagation();openTransferContact('Айгерим Досова','АД','#f093fb,#f5576c')">Повторить</button>
+            </div>
+          </div>
+          <div class="tx" onclick="openTxDetail('Нурлан Сейткали','50 000','minus')">
+            <div class="c-av" style="background:linear-gradient(135deg,#4facfe,#00f2fe);width:44px;height:44px;border-radius:14px;font-size:13px;flex-shrink:0">НС</div>
+            <div class="tx-info"><div class="tx-name">Нурлан Сейткали</div><div class="tx-date">27 Февр. · Halyk</div></div>
+            <div class="tx-right">
+              <div class="tx-amt tx-minus">−₸ 50 000</div>
+              <button class="tx-repeat" onclick="event.stopPropagation();openTransferContact('Нурлан Сейткали','НС','#4facfe,#00f2fe')">Повторить</button>
+            </div>
+          </div>
+        </div>
+        <div class="sp3"></div>
+      </div>
+      <div class="nav">
+        <button class="nav-item" onclick="goTo('s-home');setTab('home')"><div class="nav-icon">🏠</div><span class="nav-label">Главная</span></button>
+        <button class="nav-item" onclick="goTo('s-analytics');setTab('analytics')"><div class="nav-icon">📊</div><span class="nav-label">Финансы</span></button>
+        <button class="nav-fab" onclick="goTo('s-payments');setTab('pay')"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></button>
+        <button class="nav-item active" onclick="setTab('transfer')"><div class="nav-icon">↔️</div><span class="nav-label">Переводы</span></button>
+        <button class="nav-item" onclick="goTo('s-profile');setTab('profile')"><div class="nav-icon">👤</div><span class="nav-label">Профиль</span></button>
+      </div>
+    </div>
+
+    <!-- ======= ANALYTICS ======= -->
+    <div class="screen" id="s-analytics">
+      <div class="scroll">
+        <div class="analytics-hero">
+          <div class="ana-top">
+            <div>
+              <div class="ana-spend">Расходы за март</div>
+              <div class="ana-amount">₸ 48 320</div>
+            </div>
+            <div class="ana-vs">
+              <div class="ana-vs-lbl">vs февраль</div>
+              <div class="ana-vs-val">▼ 12%</div>
+            </div>
+          </div>
+          <div class="period-tabs">
+            <div class="ptab on" onclick="setPeriod(this,'march')">Март</div>
+            <div class="ptab" onclick="setPeriod(this,'feb')">Февраль</div>
+            <div class="ptab" onclick="setPeriod(this,'q1')">3 мес.</div>
+            <div class="ptab" onclick="setPeriod(this,'year')">Год</div>
+          </div>
+        </div>
+
+        <div class="chart-box">
+          <div class="chart-lbl">Расходы по неделям</div>
+          <div class="bars" id="chartBars">
+            <div class="bar-col"><div class="bar dim" style="height:32px"></div><div class="bar-lbl">Нед 1</div></div>
+            <div class="bar-col"><div class="bar hi" style="height:58px"></div><div class="bar-lbl">Нед 2</div></div>
+            <div class="bar-col"><div class="bar dim" style="height:44px"></div><div class="bar-lbl">Нед 3</div></div>
+            <div class="bar-col"><div class="bar dim" style="height:20px"></div><div class="bar-lbl">Нед 4</div></div>
+          </div>
+        </div>
+
+        <div class="sec-head" style="padding:0 18px 14px"><span class="sec-title">По категориям</span></div>
+        <div class="cat-list">
+          <div class="cat-item">
+            <div class="cat-ico" style="background:#FFF3E0">🛒</div>
+            <div class="cat-mid"><div class="cat-name">Продукты</div><div class="cat-track"><div class="cat-fill" style="width:72%"></div></div></div>
+            <div class="cat-amt">₸ 18 500</div>
+          </div>
+          <div class="cat-item">
+            <div class="cat-ico" style="background:#E3F2FD">🚕</div>
+            <div class="cat-mid"><div class="cat-name">Транспорт</div><div class="cat-track"><div class="cat-fill" style="width:42%"></div></div></div>
+            <div class="cat-amt">₸ 9 800</div>
+          </div>
+          <div class="cat-item">
+            <div class="cat-ico" style="background:#FCE4EC">🍽️</div>
+            <div class="cat-mid"><div class="cat-name">Кафе и рестораны</div><div class="cat-track"><div class="cat-fill" style="width:32%"></div></div></div>
+            <div class="cat-amt">₸ 7 200</div>
+          </div>
+          <div class="cat-item">
+            <div class="cat-ico" style="background:#EDE7F6">💊</div>
+            <div class="cat-mid"><div class="cat-name">Здоровье</div><div class="cat-track"><div class="cat-fill" style="width:26%"></div></div></div>
+            <div class="cat-amt">₸ 6 320</div>
+          </div>
+          <div class="cat-item">
+            <div class="cat-ico" style="background:#E8F5E9">🛍️</div>
+            <div class="cat-mid"><div class="cat-name">Одежда</div><div class="cat-track"><div class="cat-fill" style="width:18%"></div></div></div>
+            <div class="cat-amt">₸ 4 500</div>
+          </div>
+          <div class="cat-item">
+            <div class="cat-ico" style="background:#FFF9C4">⚡</div>
+            <div class="cat-mid"><div class="cat-name">ЖКХ</div><div class="cat-track"><div class="cat-fill" style="width:10%"></div></div></div>
+            <div class="cat-amt">₸ 2 000</div>
+          </div>
+        </div>
+        <div class="sp3"></div>
+      </div>
+      <div class="nav">
+        <button class="nav-item" onclick="goTo('s-home');setTab('home')"><div class="nav-icon">🏠</div><span class="nav-label">Главная</span></button>
+        <button class="nav-item active" onclick="setTab('analytics')"><div class="nav-icon">📊</div><span class="nav-label">Финансы</span></button>
+        <button class="nav-fab" onclick="goTo('s-payments');setTab('pay')"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></button>
+        <button class="nav-item" onclick="goTo('s-transfers');setTab('transfer')"><div class="nav-icon">↔️</div><span class="nav-label">Переводы</span></button>
+        <button class="nav-item" onclick="goTo('s-profile');setTab('profile')"><div class="nav-icon">👤</div><span class="nav-label">Профиль</span></button>
+      </div>
+    </div>
+
+    <!-- ======= PROFILE ======= -->
+    <div class="screen" id="s-profile">
+      <div class="scroll">
+        <div class="profile-hero">
+          <div class="p-avatar">👤</div>
+          <div class="p-name">Гревцев Михаил</div>
+          <div class="p-id">ID: 2410-8823 · Клиент с 2019</div>
+        </div>
+        <div class="p-stats">
+          <div class="p-stat"><div class="p-sv">3</div><div class="p-sk">Карты</div></div>
+          <div class="p-stat"><div class="p-sv">2</div><div class="p-sk">Депозиты</div></div>
+          <div class="p-stat"><div class="p-sv">1</div><div class="p-sk">Кредит</div></div>
+          <div class="p-stat"><div class="p-sv">Gold</div><div class="p-sk">Статус</div></div>
+        </div>
+        <div class="menu-list">
+          <div class="menu-item" onclick="openCardDetail('green')">
+            <div class="mi-ico" style="background:#E6F7EE">💳</div>
+            <div class="mi-mid"><div class="mi-lbl">Мои карты</div><div class="mi-sub">3 активные карты</div></div>
+            <div class="mi-right"><div class="mi-arrow"><svg viewBox="0 0 24 24"><polyline points="9,18 15,12 9,6"/></svg></div></div>
+          </div>
+          <div class="menu-item" onclick="openDeposit()">
+            <div class="mi-ico" style="background:#FFF8E6">🏦</div>
+            <div class="mi-mid"><div class="mi-lbl">Депозиты и сбережения</div><div class="mi-sub">Ставка до 14.5%</div></div>
+            <div class="mi-right"><div class="mi-arrow"><svg viewBox="0 0 24 24"><polyline points="9,18 15,12 9,6"/></svg></div></div>
+          </div>
+          <div class="menu-item" onclick="openCredit()">
+            <div class="mi-ico" style="background:#FFF0E6">💰</div>
+            <div class="mi-mid"><div class="mi-lbl">Кредиты и рассрочка</div><div class="mi-sub">Осталось ₸ 280 000</div></div>
+            <div class="mi-right"><div class="mi-arrow"><svg viewBox="0 0 24 24"><polyline points="9,18 15,12 9,6"/></svg></div></div>
+          </div>
+          <div class="menu-item" onclick="openNotif()">
+            <div class="mi-ico" style="background:#E3F2FD">🔔</div>
+            <div class="mi-mid"><div class="mi-lbl">Уведомления</div><div class="mi-sub">Push, SMS, Email</div></div>
+            <div class="mi-right"><div class="mi-badge">3</div><div class="mi-arrow"><svg viewBox="0 0 24 24"><polyline points="9,18 15,12 9,6"/></svg></div></div>
+          </div>
+          <div class="menu-item" onclick="openSecurity()">
+            <div class="mi-ico" style="background:#E8F5E9">🔒</div>
+            <div class="mi-mid"><div class="mi-lbl">Безопасность</div><div class="mi-sub">Биометрия, пароль, 2FA</div></div>
+            <div class="mi-right"><div class="mi-arrow"><svg viewBox="0 0 24 24"><polyline points="9,18 15,12 9,6"/></svg></div></div>
+          </div>
+          <div class="menu-item" onclick="showInfo('Поддержка','Чат с оператором, звонок 595, офисы и банкоматы рядом с вами.')">
+            <div class="mi-ico" style="background:#FFF9C4">💬</div>
+            <div class="mi-mid"><div class="mi-lbl">Поддержка</div><div class="mi-sub">Чат · Звонок · Офисы</div></div>
+            <div class="mi-right"><div class="mi-arrow"><svg viewBox="0 0 24 24"><polyline points="9,18 15,12 9,6"/></svg></div></div>
+          </div>
+          <div class="menu-item" onclick="showInfo('Документы','Выписки по счетам, договоры, справки. Запросить онлайн или в офисе.')">
+            <div class="mi-ico" style="background:#FCE4EC">📋</div>
+            <div class="mi-mid"><div class="mi-lbl">Документы и выписки</div><div class="mi-sub">Справки, договоры</div></div>
+            <div class="mi-right"><div class="mi-arrow"><svg viewBox="0 0 24 24"><polyline points="9,18 15,12 9,6"/></svg></div></div>
+          </div>
+          <div class="menu-item" onclick="openSettings()">
+            <div class="mi-ico" style="background:#EDE7F6">⚙️</div>
+            <div class="mi-mid"><div class="mi-lbl">Настройки</div><div class="mi-sub">Язык, тема, регион</div></div>
+            <div class="mi-right"><div class="mi-arrow"><svg viewBox="0 0 24 24"><polyline points="9,18 15,12 9,6"/></svg></div></div>
+          </div>
+          <div class="menu-item" onclick="confirmLogout()">
+            <div class="mi-ico" style="background:#FFEBEE">🚪</div>
+            <div class="mi-mid"><div class="mi-lbl" style="color:var(--red)">Выйти из аккаунта</div></div>
+          </div>
+        </div>
+        <div class="sp3"></div>
+      </div>
+      <div class="nav">
+        <button class="nav-item" onclick="goTo('s-home');setTab('home')"><div class="nav-icon">🏠</div><span class="nav-label">Главная</span></button>
+        <button class="nav-item" onclick="goTo('s-analytics');setTab('analytics')"><div class="nav-icon">📊</div><span class="nav-label">Финансы</span></button>
+        <button class="nav-fab" onclick="goTo('s-payments');setTab('pay')"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></button>
+        <button class="nav-item" onclick="goTo('s-transfers');setTab('transfer')"><div class="nav-icon">↔️</div><span class="nav-label">Переводы</span></button>
+        <button class="nav-item active" onclick="setTab('profile')"><div class="nav-icon">👤</div><span class="nav-label">Профиль</span></button>
+      </div>
+    </div>
+
+  </div><!-- /screens -->
+
+  <!-- OVERLAY -->
+  <div class="overlay" id="overlay" onclick="closeSheet()"></div>
+
+  <!-- BOTTOM SHEETS -->
+  <div class="sheet" id="sheet">
+    <div class="sheet-handle"></div>
+    <div id="sheetContent"></div>
+  </div>
+
+</div><!-- /phone -->
+
+<script>
+// ── CLOCK ──────────────────────────────────────────────
+function tick(){
+  const n=new Date();
+  document.getElementById('clockEl').textContent=
+    n.getHours().toString().padStart(2,'0')+':'+n.getMinutes().toString().padStart(2,'0');
+}
+tick(); setInterval(tick,10000);
+
+// ── NAVIGATION ─────────────────────────────────────────
+let history=[];
+const statusBar=document.getElementById('statusBar');
+const heroScreens=['s-home','s-analytics','s-profile'];
+
+function goTo(id){
+  const cur=document.querySelector('.screen.active');
+  if(cur&&cur.id===id)return;
+  if(cur){
+    history.push(cur.id);
+    cur.classList.remove('active');
+    cur.classList.add('prev');
+    setTimeout(()=>cur.classList.remove('prev'),400);
+  }
+  const next=document.getElementById(id);
+  next.classList.add('active');
+  // Scroll to top
+  const sc=next.querySelector('.scroll');
+  if(sc)sc.scrollTop=0;
+  // Status bar color
+  statusBar.className='status '+(heroScreens.includes(id)?'dark':'light');
+}
+
+function goBack(){
+  closeSheet();
+  if(history.length){
+    const prev=history.pop();
+    const cur=document.querySelector('.screen.active');
+    if(cur){
+      cur.classList.remove('active');
+      cur.style.transform='translateX(100%)';
+      setTimeout(()=>{cur.style.transform='';},400);
+    }
+    const target=document.getElementById(prev);
+    target.classList.add('active');
+    statusBar.className='status '+(heroScreens.includes(prev)?'dark':'light');
+  } else {
+    goTo('s-home');
+  }
+}
+
+function setTab(t){
+  document.querySelectorAll('.nav-item').forEach(i=>{
+    const lbl=i.querySelector('.nav-label');
+    if(!lbl)return;
+    const map={home:'Главная',analytics:'Финансы',transfer:'Переводы',profile:'Профиль'};
+    i.classList.toggle('active', map[t]===lbl.textContent);
+  });
+}
+
+// ── SHEET ─────────────────────────────────────────────
+function openSheet(html){
+  document.getElementById('sheetContent').innerHTML=html;
+  document.getElementById('overlay').classList.add('show');
+  document.getElementById('sheet').classList.add('show');
+}
+function closeSheet(){
+  document.getElementById('overlay').classList.remove('show');
+  document.getElementById('sheet').classList.remove('show');
+}
+
+// ── TRANSFER SHEET ─────────────────────────────────────
+let transferAmt='';
+let transferTarget='';
+function openTransferSheet(){
+  transferAmt='';transferTarget='Основная карта ••••4521';
+  renderTransferStep1();
+}
+function openTransferContact(name,initials,grad){
+  transferAmt='';transferTarget=name;
+  openSheet(`
+    <div class="sheet-title">Перевод: ${name}</div>
+    <div class="tf-form">
+      <div class="tf-label">Сумма перевода</div>
+      <input class="tf-input tf-amount" id="amtInput" placeholder="0" readonly value="">
+      <div class="keypad">
+        ${[1,2,3,4,5,6,7,8,9,'','0','⌫'].map(k=>`
+          <button class="key ${k==='⌫'?'key-del':''}" onclick="keyPress('${k}')">${k}</button>
+        `).join('')}
+      </div>
+      <div class="sp2"></div>
+      <button class="btn-primary" onclick="confirmTransfer('${name}')">Перевести</button>
+      <button class="btn-sec" onclick="closeSheet()">Отмена</button>
+    </div><div class="sp3"></div>
+  `);
+}
+function openTransferTo(method,ico){
+  openSheet(`
+    <div class="sheet-title">${ico} ${method}</div>
+    <div class="tf-form">
+      <div class="tf-label">Номер</div>
+      <input class="tf-input" id="recipInput" placeholder="${method==='По номеру телефона'?'+7 (___) ___ __ __':'#### #### #### ####'}" type="tel">
+      <div class="tf-label">Сумма</div>
+      <input class="tf-input" id="amtInput2" placeholder="0 ₸" type="number">
+      <button class="btn-primary" onclick="confirmTransfer2()">Продолжить</button>
+      <button class="btn-sec" onclick="closeSheet()">Отмена</button>
+    </div><div class="sp3"></div>
+  `);
+}
+function renderTransferStep1(){
+  openSheet(`
+    <div class="sheet-title">Быстрый перевод</div>
+    <div class="tf-form">
+      <div class="tf-label">Сумма</div>
+      <input class="tf-input tf-amount" id="amtInput" placeholder="0 ₸" readonly>
+      <div class="keypad">
+        ${[1,2,3,4,5,6,7,8,9,'','0','⌫'].map(k=>`
+          <button class="key ${k==='⌫'?'key-del':''}" onclick="keyPress('${k}')">${k}</button>
+        `).join('')}
+      </div>
+      <div class="sp2"></div>
+      <button class="btn-primary" onclick="confirmTransfer('${transferTarget}')">Перевести</button>
+      <button class="btn-sec" onclick="closeSheet()">Отмена</button>
+    </div><div class="sp3"></div>
+  `);
+}
+function keyPress(k){
+  const el=document.getElementById('amtInput');
+  if(!el)return;
+  if(k==='⌫'){transferAmt=transferAmt.slice(0,-1);}
+  else if(k===''){return;}
+  else if(transferAmt.length<9){transferAmt+=k;}
+  el.value=transferAmt?parseInt(transferAmt,10).toLocaleString('ru')+' ₸':'';
+}
+function confirmTransfer(name){
+  const amt=document.getElementById('amtInput');
+  const v=amt?amt.value:'';
+  if(!v||v==='0 ₸'){showToast('Введите сумму');return;}
+  showSuccess('Перевод отправлен!',`${v}`,`Получатель: ${name}`);
+}
+function confirmTransfer2(){
+  const r=document.getElementById('recipInput');
+  const a=document.getElementById('amtInput2');
+  if(!r||!r.value){showToast('Введите номер');return;}
+  if(!a||!a.value){showToast('Введите сумму');return;}
+  showSuccess('Перевод отправлен!',`₸ ${parseInt(a.value).toLocaleString('ru')}`,`На ${r.value}`);
+}
+
+// ── PAYMENT SHEET ──────────────────────────────────────
+function openPaySheet(name){
+  openSheet(`
+    <div class="sheet-title">💳 ${name}</div>
+    <div class="tf-form">
+      <div class="tf-label">Номер лицевого счёта / телефон</div>
+      <input class="tf-input" id="accInput" placeholder="Введите номер" type="tel">
+      <div class="tf-label">Сумма</div>
+      <input class="tf-input" id="payAmt" placeholder="0 ₸" type="number">
+      <button class="btn-primary" onclick="confirmPayment('${name}')">Оплатить</button>
+      <button class="btn-sec" onclick="closeSheet()">Отмена</button>
+    </div><div class="sp3"></div>
+  `);
+}
+function confirmPayment(name){
+  const a=document.getElementById('payAmt');
+  if(!a||!a.value){showToast('Введите сумму');return;}
+  showSuccess('Оплата прошла!',`₸ ${parseInt(a.value).toLocaleString('ru')}`,name+' — оплачено');
+}
+function quickRepeat(name,amt){
+  openSheet(`
+    <div class="sheet-title">⚡ Повтор платежа</div>
+    <div class="tf-form">
+      <div style="background:var(--bg);border-radius:var(--r-sm);padding:16px;text-align:center;margin-bottom:16px">
+        <div style="font-size:13px;color:var(--text2);margin-bottom:4px">${name}</div>
+        <div style="font-size:28px;font-weight:900;color:var(--text)">₸ ${amt}</div>
+      </div>
+      <button class="btn-primary" onclick="showSuccess('Оплата прошла!','₸ ${amt}','${name} — повтор выполнен')">Подтвердить</button>
+      <button class="btn-sec" onclick="closeSheet()">Отмена</button>
+    </div><div class="sp3"></div>
+  `);
+}
+
+// ── TOPUP ─────────────────────────────────────────────
+function openTopupSheet(){
+  openSheet(`
+    <div class="sheet-title">⬇️ Пополнить карту</div>
+    <div class="tf-form">
+      <div class="tf-label">Источник пополнения</div>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px">
+        <div onclick="this.style.borderColor='var(--g1)';document.querySelectorAll('.src-opt').forEach(e=>e.style.borderColor='rgba(0,0,0,.1)');this.style.borderColor='var(--g1)'" class="src-opt" style="padding:12px;border:1.5px solid rgba(0,0,0,.1);border-radius:12px;cursor:pointer;font-size:13px;font-weight:700;color:var(--text)">💳 Другая карта</div>
+        <div onclick="this.style.borderColor='var(--g1)'" class="src-opt" style="padding:12px;border:1.5px solid rgba(0,0,0,.1);border-radius:12px;cursor:pointer;font-size:13px;font-weight:700;color:var(--text)">📱 Kaspi перевод</div>
+        <div onclick="this.style.borderColor='var(--g1)'" class="src-opt" style="padding:12px;border:1.5px solid rgba(0,0,0,.1);border-radius:12px;cursor:pointer;font-size:13px;font-weight:700;color:var(--text)">🏦 Другой банк</div>
+      </div>
+      <div class="tf-label">Сумма</div>
+      <input class="tf-input" id="topupAmt" placeholder="0 ₸" type="number">
+      <button class="btn-primary" onclick="confirmTopup()">Пополнить</button>
+      <button class="btn-sec" onclick="closeSheet()">Отмена</button>
+    </div><div class="sp3"></div>
+  `);
+}
+function confirmTopup(){
+  const a=document.getElementById('topupAmt');
+  if(!a||!a.value){showToast('Введите сумму');return;}
+  const val=parseInt(a.value);
+  showSuccess('Карта пополнена!',`+₸ ${val.toLocaleString('ru')}','Зачислено на ••••4521'`);
+}
+
+// ── CARD DETAIL ────────────────────────────────────────
+function openCardDetail(type){
+  const cards={
+    green:{cls:'card-g',name:'Halyk Visa Classic',num:'•••• •••• •••• 4521',exp:'03/28',bal:'₸ 248 500'},
+    gold:{cls:'card-gold',name:'Halyk Gold Mastercard',num:'•••• •••• •••• 7832',exp:'11/26',bal:'₸ 84 200'},
+    blue:{cls:'card-blue',name:'Кредитная карта',num:'•••• •••• •••• 3391',exp:'07/27',bal:'Лимит ₸ 500 000'},
+  };
+  const c=cards[type]||cards.green;
+  openSheet(`
+    <div class="card-full ${c.cls}">
+      <div class="cf-type">${c.name}</div>
+      <div class="cf-num">${c.num}</div>
+      <div class="cf-row"><span>Действительна до ${c.exp}</span><span>VISA</span></div>
+      <div class="cf-bal">${c.bal}</div>
+    </div>
+    <div class="card-actions-grid">
+      <button class="ca-btn" onclick="openTransferSheet()"><div class="ca-ico">↑</div><div class="ca-lbl">Перевести</div></button>
+      <button class="ca-btn" onclick="openTopupSheet()"><div class="ca-ico">↓</div><div class="ca-lbl">Пополнить</div></button>
+      <button class="ca-btn" onclick="openHistory()"><div class="ca-ico">📄</div><div class="ca-lbl">Выписка</div></button>
+      <button class="ca-btn" onclick="showInfo('Настройки карты','Лимиты, блокировка, реквизиты и дополнительные параметры вашей карты.')"><div class="ca-ico">⚙️</div><div class="ca-lbl">Настройки</div></button>
+    </div>
+    <div class="tf-form">
+      <button class="btn-sec" style="color:var(--red);border-color:rgba(229,57,53,.2)" onclick="showInfo('Блокировка карты','Для блокировки карты нажмите подтвердить. Карту можно разблокировать в любое время.')">🔒 Заблокировать карту</button>
+    </div>
+    <div class="sp3"></div>
+  `);
+}
+
+// ── NOTIFICATIONS ──────────────────────────────────────
+function openNotif(){
+  openSheet(`
+    <div class="sheet-title">Уведомления</div>
+    <div class="notif-item unread" onclick="closeSheet()">
+      <div class="n-dot"></div>
+      <div><div class="n-text">Ваша карта ••••4521 пополнена на <strong>₸ 180 000</strong>. Зарплата за март.</div><div class="n-time">Сегодня, 09:00</div></div>
+    </div>
+    <div class="notif-item unread" onclick="closeSheet()">
+      <div class="n-dot"></div>
+      <div><div class="n-text">Новая акция: оформите депозит «Копилка» со ставкой <strong>14.5% годовых</strong>.</div><div class="n-time">Сегодня, 08:30</div></div>
+    </div>
+    <div class="notif-item unread" onclick="closeSheet()">
+      <div class="n-dot"></div>
+      <div><div class="n-text">Курс USD вырос на 0.3%. Актуальный курс: <strong>497.5 – 502.5 ₸</strong>.</div><div class="n-time">Вчера, 17:45</div></div>
+    </div>
+    <div class="notif-item" onclick="closeSheet()">
+      <div class="n-dot read"></div>
+      <div><div class="n-text">Оплата Kcell на ₸ 3 000 выполнена успешно.</div><div class="n-time">01 Март</div></div>
+    </div>
+    <div class="notif-item" onclick="closeSheet()">
+      <div class="n-dot read"></div>
+      <div><div class="n-text">Перевод ₸ 15 000 для Айгерим Досова выполнен.</div><div class="n-time">01 Март</div></div>
+    </div>
+    <div class="sp3"></div>
+  `);
+}
+
+// ── TX DETAIL ──────────────────────────────────────────
+function openTxDetail(name,amt,dir){
+  const isPlus=dir==='plus';
+  openSheet(`
+    <div style="padding:24px 20px;text-align:center;border-bottom:1px solid rgba(0,0,0,.06)">
+      <div style="font-size:48px;margin-bottom:12px">${isPlus?'💰':name.includes('Яндекс')?'🚕':name.includes('Kcell')||name.includes('связь')?'📱':name.includes('Magnum')||name.includes('продукт')?'🛒':'💳'}</div>
+      <div style="font-size:20px;font-weight:800;color:var(--text);margin-bottom:4px">${name}</div>
+      <div style="font-size:34px;font-weight:900;color:${isPlus?'var(--g1)':'var(--text)'};letter-spacing:-1px">${isPlus?'+':'−'}₸ ${amt}</div>
+      <div style="font-size:12px;color:var(--text3);margin-top:8px">03 Март 2026 · 11:24</div>
+    </div>
+    <div style="padding:16px 20px">
+      ${[['Карта','Halyk Visa ••••4521'],['Статус','✅ Выполнено'],['Категория',isPlus?'Доходы':'Расходы'],['Номер операции','TXN-2026-84721']].map(([k,v])=>`
+        <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(0,0,0,.05)">
+          <span style="font-size:13px;color:var(--text3)">${k}</span>
+          <span style="font-size:13px;font-weight:700;color:var(--text)">${v}</span>
+        </div>
+      `).join('')}
+    </div>
+    <div class="tf-form">
+      <button class="btn-sec" onclick="closeSheet()">Закрыть</button>
+    </div><div class="sp3"></div>
+  `);
+}
+
+// ── HISTORY ────────────────────────────────────────────
+function openHistory(){
+  openSheet(`
+    <div class="sheet-title">История операций</div>
+    <div style="padding:0 20px 4px;display:flex;gap:8px;overflow-x:auto;scrollbar-width:none">
+      <div class="chip on" style="flex-shrink:0">Все</div>
+      <div class="chip" style="flex-shrink:0">Расходы</div>
+      <div class="chip" style="flex-shrink:0">Доходы</div>
+      <div class="chip" style="flex-shrink:0">Март</div>
+    </div>
+    <div style="padding:0 20px">
+      ${[
+        ['🛒','Magnum Cash&Carry','Сег. 11:24','−₸ 4 320','minus'],
+        ['💰','Зарплата','03 Март','+ ₸ 180 000','plus'],
+        ['🚕','Яндекс Go','02 Март','−₸ 1 250','minus'],
+        ['📱','Kcell','01 Март','−₸ 3 000','minus'],
+        ['💊','Appteka','01 Март','−₸ 3 800','minus'],
+        ['🌐','Beeline Internet','25 Февр.','−₸ 4 500','minus'],
+        ['⚡','Электроэнергия','20 Февр.','−₸ 2 800','minus'],
+        ['🛍️','Lamoda','18 Февр.','−₸ 12 000','minus'],
+      ].map(([ico,name,date,amt,dir])=>`
+        <div style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid rgba(0,0,0,.05)">
+          <div style="width:42px;height:42px;background:var(--bg);border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">${ico}</div>
+          <div style="flex:1"><div style="font-size:14px;font-weight:700;color:var(--text)">${name}</div><div style="font-size:11px;color:var(--text3)">${date}</div></div>
+          <div style="font-size:14px;font-weight:800;color:${dir==='plus'?'var(--g1)':'var(--text)'}">${amt}</div>
+        </div>
+      `).join('')}
+    </div>
+    <div class="sp3"></div>
+  `);
+}
+
+// ── QR ─────────────────────────────────────────────────
+function openQR(){
+  openSheet(`
+    <div class="sheet-title">📷 QR-код</div>
+    <div style="text-align:center;padding:20px">
+      <div style="width:180px;height:180px;margin:0 auto 16px;background:var(--bg);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:80px">🔲</div>
+      <div style="font-size:15px;font-weight:700;color:var(--text);margin-bottom:4px">Гревцев Михаил</div>
+      <div style="font-size:13px;color:var(--text3)">•••• •••• •••• 4521</div>
+    </div>
+    <div class="tf-form">
+      <button class="btn-primary" onclick="showToast('Ссылка скопирована!')">📋 Скопировать ссылку</button>
+      <button class="btn-sec" onclick="closeSheet()">Закрыть</button>
+    </div><div class="sp3"></div>
+  `);
+}
+
+// ── RATES ──────────────────────────────────────────────
+function openRates(){
+  openSheet(`
+    <div class="sheet-title">Курсы валют</div>
+    <div style="padding:0 20px">
+      ${[
+        ['🇺🇸','USD','Доллар США','497.5','502.5','+0.3%','up'],
+        ['🇪🇺','EUR','Евро','577.95','583.45','-0.1%','down'],
+        ['🇷🇺','RUB','Российский рубль','6.31','6.61','+0.5%','up'],
+        ['🇬🇧','GBP','Фунт стерлингов','627.0','634.5','+0.2%','up'],
+        ['🇨🇳','CNY','Китайский юань','68.4','69.8','-0.3%','down'],
+        ['🇦🇪','AED','Дирхам ОАЭ','134.5','137.0','+0.1%','up'],
+      ].map(([f,c,n,b,s,ch,d])=>`
+        <div style="display:flex;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid rgba(0,0,0,.05)">
+          <div style="font-size:26px">${f}</div>
+          <div style="flex:1"><div style="font-size:14px;font-weight:800;color:var(--text)">${c}</div><div style="font-size:11px;color:var(--text3)">${n}</div></div>
+          <div style="text-align:right">
+            <div style="font-size:13px;font-weight:700;color:var(--text)">${b} – ${s}</div>
+            <div style="font-size:11px;font-weight:700;color:var(--${d==='up'?'g1':'red'})">${ch}</div>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+    <div style="padding:12px 20px;font-size:11px;color:var(--text3);text-align:center">Обновлено: 04.03.2026 13:42 по вр. Астаны</div>
+    <div class="sp3"></div>
+  `);
+}
+
+// ── DEPOSIT ────────────────────────────────────────────
+function openDeposit(){
+  openSheet(`
+    <div class="sheet-title">🏦 Депозиты</div>
+    <div style="padding:0 20px">
+      ${[
+        ['Копилка','14.5%','от ₸ 10 000','На 12 месяцев','#E8F5E9'],
+        ['Накопительный','12.0%','от ₸ 50 000','На 6 месяцев','#E3F2FD'],
+        ['Валютный USD','5.5%','от $500','На 12 месяцев','#FFF8E1'],
+      ].map(([n,r,min,term,bg])=>`
+        <div style="background:${bg};border-radius:14px;padding:16px;margin-bottom:12px;cursor:pointer" onclick="showInfo('Депозит ${n}','Ставка ${r} годовых. Минимальная сумма ${min}. ${term}. Оформите прямо сейчас!')">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+            <div style="font-size:15px;font-weight:800;color:var(--text)">${n}</div>
+            <div style="font-size:20px;font-weight:900;color:var(--g1)">${r}</div>
+          </div>
+          <div style="font-size:12px;color:var(--text2)">${min} · ${term}</div>
+        </div>
+      `).join('')}
+    </div>
+    <div class="tf-form">
+      <button class="btn-primary" onclick="showInfo('Открыть депозит','Для открытия депозита выберите программу и заполните заявку. Менеджер свяжется с вами в течение дня.')">Открыть депозит</button>
+    </div>
+    <div class="sp3"></div>
+  `);
+}
+
+// ── CREDIT ─────────────────────────────────────────────
+function openCredit(){
+  openSheet(`
+    <div class="sheet-title">💰 Кредиты</div>
+    <div style="padding:0 20px">
+      <div style="background:linear-gradient(135deg,#0D3B8E,#1565C0);border-radius:14px;padding:18px;color:#fff;margin-bottom:16px">
+        <div style="font-size:12px;opacity:.75;margin-bottom:4px">Текущий кредит</div>
+        <div style="font-size:22px;font-weight:900">₸ 500 000</div>
+        <div style="font-size:12px;opacity:.7;margin-top:4px">Осталось: ₸ 280 000 · 14 мес.</div>
+        <div style="background:rgba(255,255,255,.2);border-radius:6px;height:6px;margin-top:10px;overflow:hidden">
+          <div style="background:#fff;height:100%;width:44%;border-radius:6px"></div>
+        </div>
+      </div>
+      <div style="font-size:14px;font-weight:800;color:var(--text);margin-bottom:12px">Досрочное погашение</div>
+      <input class="tf-input" id="creditPay" placeholder="Сумма платежа" type="number">
+      <button class="btn-primary" onclick="confirmCreditPay()">Внести платёж</button>
+    </div>
+    <div class="sp3"></div>
+  `);
+}
+function confirmCreditPay(){
+  const a=document.getElementById('creditPay');
+  if(!a||!a.value){showToast('Введите сумму');return;}
+  showSuccess('Платёж внесён!',`₸ ${parseInt(a.value).toLocaleString('ru')}','Зачислено в счёт погашения кредита'`);
+}
+
+// ── SECURITY ───────────────────────────────────────────
+function openSecurity(){
+  openSheet(`
+    <div class="sheet-title">🔒 Безопасность</div>
+    <div class="menu-list" style="padding:0 20px">
+      ${[
+        ['👆','Face ID / Touch ID','Биометрический вход','toggle','on'],
+        ['🔑','PIN-код','Изменить 4-значный PIN','arrow',''],
+        ['📲','SMS-подтверждение','Для переводов >50 000 ₸','toggle','on'],
+        ['🌐','Разрешённые устройства','2 устройства','arrow',''],
+        ['📍','История входов','Последний: сегодня 13:42','arrow',''],
+      ].map(([ico,lbl,sub,type,state])=>`
+        <div style="display:flex;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid rgba(0,0,0,.05)">
+          <div style="width:40px;height:40px;background:var(--bg);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">${ico}</div>
+          <div style="flex:1"><div style="font-size:14px;font-weight:700;color:var(--text)">${lbl}</div><div style="font-size:11px;color:var(--text3)">${sub}</div></div>
+          ${type==='toggle'?`<div class="mi-toggle ${state==='on'?'':'off'}" onclick="this.classList.toggle('off')"></div>`:`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text3)" stroke-width="2" stroke-linecap="round"><polyline points="9,18 15,12 9,6"/></svg>`}
+        </div>
+      `).join('')}
+    </div>
+    <div class="sp3"></div>
+  `);
+}
+
+// ── SETTINGS ───────────────────────────────────────────
+function openSettings(){
+  openSheet(`
+    <div class="sheet-title">⚙️ Настройки</div>
+    <div class="menu-list" style="padding:0 20px">
+      ${[
+        ['🌐','Язык приложения','Қазақша / Русский'],
+        ['🎨','Тема оформления','Светлая'],
+        ['📍','Регион','Казахстан — Алматы'],
+        ['🔔','Push-уведомления','Включены'],
+        ['📊','Аналитика','Анонимная статистика'],
+      ].map(([ico,lbl,val])=>`
+        <div style="display:flex;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid rgba(0,0,0,.05)">
+          <div style="width:40px;height:40px;background:var(--bg);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">${ico}</div>
+          <div style="flex:1"><div style="font-size:14px;font-weight:700;color:var(--text)">${lbl}</div><div style="font-size:11px;color:var(--text3)">${val}</div></div>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text3)" stroke-width="2" stroke-linecap="round"><polyline points="9,18 15,12 9,6"/></svg>
+        </div>
+      `).join('')}
+    </div>
+    <div class="sp3"></div>
+  `);
+}
+
+// ── ALL CARDS ──────────────────────────────────────────
+function openAllCards(){
+  openSheet(`
+    <div class="sheet-title">Все карты</div>
+    <div style="padding:0 20px">
+      ${[
+        ['card-g','Halyk Visa Classic','••••4521','₸ 248 500','03/28','green'],
+        ['card-gold','Halyk Gold Mastercard','••••7832','₸ 84 200','11/26','gold'],
+        ['card-blue','Кредитная карта','••••3391','Лимит ₸ 500 000','07/27','blue'],
+      ].map(([cls,name,num,bal,exp,type])=>`
+        <div class="mini-card ${cls}" style="min-width:unset;width:100%;margin-bottom:12px" onclick="closeSheet();openCardDetail('${type}')">
+          <div class="mc-type">${name}</div>
+          <div class="mc-bal">${bal}</div>
+          <div style="display:flex;justify-content:space-between"><div class="mc-num">${num}</div><div class="mc-num">до ${exp}</div></div>
+        </div>
+      `).join('')}
+      <button class="btn-primary" onclick="showInfo('Новая карта','Для оформления новой карты выберите тип: дебетовая, кредитная или детская Halyk Easy.')">+ Открыть новую карту</button>
+    </div>
+    <div class="sp3"></div>
+  `);
+}
+
+// ── ALL CONTACTS ────────────────────────────────────────
+function openAllContacts(){
+  showInfo('Контакты','Список всех получателей переводов. Добавляйте новые контакты по номеру телефона или карты.');
+}
+
+// ── GOV ─────────────────────────────────────────────────
+function openGov(){
+  openSheet(`
+    <div class="sheet-title">🏛️ Госуслуги</div>
+    <div class="pay-grid" style="padding:0 20px 20px">
+      ${[['🚗','Штрафы ПДД'],['💰','Налоги'],['🏥','ОСМС'],['📋','Пенсионный'],['🎓','Образование'],['🏠','Нотариус']].map(([ico,n])=>`
+        <div class="pay-item" onclick="openPaySheet('${n}')">
+          <div class="pay-ico" style="background:var(--bg)">${ico}</div>
+          <div class="pay-name">${n}</div>
+        </div>
+      `).join('')}
+    </div>
+  `);
+}
+
+// ── SUCCESS ────────────────────────────────────────────
+function showSuccess(title,amount,sub){
+  openSheet(`
+    <div class="success-wrap">
+      <div class="success-ico">✅</div>
+      <div class="success-title">${title}</div>
+      <div class="success-amt">${amount}</div>
+      <div class="success-sub">${sub}</div>
+      <button class="btn-primary" onclick="closeSheet()" style="margin-top:24px">Готово</button>
+      <button class="btn-sec" onclick="openHistory()">История операций</button>
+    </div>
+  `);
+}
+
+// ── INFO ───────────────────────────────────────────────
+function showInfo(title,text){
+  openSheet(`
+    <div style="padding:0 20px 0">
+      <div class="sheet-title">${title}</div>
+      <p style="font-size:14px;color:var(--text2);line-height:1.7;margin-bottom:20px">${text}</p>
+      <button class="btn-primary" onclick="closeSheet()">Понятно</button>
+    </div>
+    <div class="sp3"></div>
+  `);
+}
+
+// ── LOGOUT ─────────────────────────────────────────────
+function confirmLogout(){
+  openSheet(`
+    <div style="padding:24px 20px;text-align:center">
+      <div style="font-size:48px;margin-bottom:16px">🚪</div>
+      <div style="font-size:18px;font-weight:800;color:var(--text);margin-bottom:8px">Выйти из аккаунта?</div>
+      <div style="font-size:14px;color:var(--text2);margin-bottom:24px">Все данные останутся в безопасности. Для входа потребуется PIN или биометрия.</div>
+      <button class="btn-primary" style="background:var(--red);box-shadow:0 6px 20px rgba(229,57,53,.3)" onclick="showToast('Выход выполнен');closeSheet()">Выйти</button>
+      <button class="btn-sec" onclick="closeSheet()">Отмена</button>
+    </div>
+    <div class="sp3"></div>
+  `);
+}
+
+// ── PAYMENTS FILTER ────────────────────────────────────
+function filterCat(el,cat){
+  document.querySelectorAll('#payChips .chip').forEach(c=>c.classList.remove('on'));
+  el.classList.add('on');
+  document.querySelectorAll('#payGrid .pay-item').forEach(item=>{
+    item.style.display=(cat==='all'||item.dataset.cat===cat)?'flex':'none';
+  });
+}
+function filterPayments(val){
+  const q=val.toLowerCase();
+  document.querySelectorAll('#payGrid .pay-item').forEach(item=>{
+    const name=item.querySelector('.pay-name').textContent.toLowerCase();
+    item.style.display=name.includes(q)?'flex':'none';
+  });
+}
+
+// ── ANALYTICS PERIODS ──────────────────────────────────
+const periodData={
+  march:{bars:[32,58,44,20],total:'₸ 48 320',vs:'▼ 12%'},
+  feb:{bars:[50,40,60,35],total:'₸ 54 900',vs:'▲ 8%'},
+  q1:{bars:[48,55,52,48],total:'₸ 152 400',vs:'▼ 3%'},
+  year:{bars:[45,58,52,60],total:'₸ 584 200',vs:'▲ 15%'},
+};
+function setPeriod(el,period){
+  document.querySelectorAll('.ptab').forEach(t=>t.classList.remove('on'));
+  el.classList.add('on');
+  const d=periodData[period];
+  document.querySelector('.ana-amount').textContent=d.total;
+  document.querySelector('.ana-vs-val').textContent=d.vs;
+  const bars=document.querySelectorAll('#chartBars .bar');
+  const max=Math.max(...d.bars);
+  bars.forEach((b,i)=>{
+    const h=Math.round((d.bars[i]/max)*70)+8;
+    b.style.height=h+'px';
+    b.className='bar '+(i===d.bars.indexOf(Math.max(...d.bars))?'hi':'dim');
+  });
+}
+
+// ── TOAST ──────────────────────────────────────────────
+function showToast(msg){
+  let t=document.getElementById('toast');
+  if(!t){t=document.createElement('div');t.id='toast';t.style.cssText='position:absolute;bottom:100px;left:50%;transform:translateX(-50%);background:rgba(13,31,23,.9);color:#fff;padding:10px 20px;border-radius:20px;font-size:13px;font-weight:700;z-index:999;white-space:nowrap;pointer-events:none;transition:opacity .3s';document.querySelector('.phone').appendChild(t);}
+  t.textContent=msg;t.style.opacity='1';
+  clearTimeout(t._t);t._t=setTimeout(()=>t.style.opacity='0',2200);
+}
+</script>
+</body>
+</html>
